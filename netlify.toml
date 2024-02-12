@@ -1,4 +1,9 @@
 [[redirects]]
   from = "/api"
-  to = "https://golandbackend-09fdf720d244.herokuapp.com"
+  to = "https://golandbackend-09fdf720d244.herokuapp.com/api"
+  status = 200
+
+[[redirects]]
+  from = "/points"
+  to = "https://golandbackend-09fdf720d244.herokuapp.com/points"
   status = 200
