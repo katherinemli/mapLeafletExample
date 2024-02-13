@@ -1,33 +1,48 @@
 <template>
-  <div style="height: 1000px; width: 100%">
-    <l-map v-if="showMap" :zoom="zoom" :center="center" :options="mapOptions" style="height: 80%"
-      @update:center="centerUpdate" @update:zoom="zoomUpdate">
-      <l-tile-layer :url="url" :attribution="attribution" />
-      <l-marker v-for="marker in markers" :key="marker.id + '-mark'" :lat-lng="latLng(marker.lat, marker.long)">
-        <!-- <l-tooltip :options="{ permanent: true, interactive: true }"> -->
-        <l-tooltip :options="{ permanent: false, interactive: true }">
-          <div @click="innerClick">
-            {{ marker.location }}
-            <p v-show="showParagraph">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              sed pretium nisl, ut sagittis sapien. Sed vel sollicitudin nisi.
-              Donec finibus semper metus id malesuada.
-            </p>
+  <div>
+    <div>
+      <p>
+        Change the values to play with the map.
+      </p>
+      <ul>
+        <li>
+          <div>Amount of points</div>
+          <div>
+            <input @input="emitEvent" @keypress="onlyNumberImput($event)" type="text" v-model.number="config.field1" />
           </div>
-        </l-tooltip>
-        <l-icon :icon-url="customMarker"></l-icon>
-        <l-popup>
-          <div @click="innerClick">
-            I am a popup {{ marker }}
-            {{ marker.lat }}
-            {{ marker.long }}
-            <p v-show="showParagraph">
+        </li>
+      </ul>
+    </div>
+    <div style="height: 1000px; width: 100%">
+      {{ dataFromChildOne }}
+      <l-map v-if="showMap" :zoom="zoom" :center="center" :options="mapOptions" style="height: 80%"
+        @update:center="centerUpdate" @update:zoom="zoomUpdate">
+        <l-tile-layer :url="url" :attribution="attribution" />
+        <l-marker v-for="marker in markers" :key="marker.id + '-mark'" :lat-lng="latLng(marker.lat, marker.long)">
+          <!-- <l-tooltip :options="{ permanent: true, interactive: true }"> -->
+          <l-tooltip :options="{ permanent: false, interactive: true }">
+            <div @click="innerClick">
+              {{ marker.location }}
+              <p v-show="showParagraph">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+                sed pretium nisl, ut sagittis sapien. Sed vel sollicitudin nisi.
+                Donec finibus semper metus id malesuada.
+              </p>
+            </div>
+          </l-tooltip>
+          <l-icon :icon-url="customMarker"></l-icon>
+          <l-popup>
+            <div @click="innerClick">
+              I am a popup {{ marker }}
+              {{ marker.lat }}
+              {{ marker.long }}
+              <p v-show="showParagraph">
 
-            </p>
-          </div>
-        </l-popup>
-      </l-marker>
-<!--       <l-marker :lat-lng="withTooltip">
+              </p>
+            </div>
+          </l-popup>
+        </l-marker>
+        <!--       <l-marker :lat-lng="withTooltip">
         <l-icon :icon-url="customMarker"></l-icon>
         <l-tooltip :options="{ permanent: true, interactive: true }">
           <div @click="innerClick">
@@ -40,7 +55,8 @@
           </div>
         </l-tooltip>
       </l-marker> -->
-    </l-map>
+      </l-map>
+    </div>
   </div>
 </template>
   
@@ -61,6 +77,7 @@ Icon.Default.mergeOptions({
 });
 export default {
   name: "MapLeaflet",
+  props: ['dataFromChildOne'],
   components: {
     LMap,
     LTileLayer,
@@ -71,6 +88,14 @@ export default {
   },
   data() {
     return {
+      config: {
+        field1: 5,
+        field2: '',
+      },
+      configFromBackend: {
+        field1: 5,
+        field2: 6,
+      },
       customMarker,
       zoom: 13,
       center: latLng(40.724634757833414, -74.00701717096757),
@@ -86,18 +111,34 @@ export default {
         zoomSnap: 0.5
       },
       showMap: false,
-      markers: []
+      markers: [],
+      fullPath: '/createRoute/'
     };
   },
+
   methods: {
     latLng: function (lat, lng) {
-      console.log('latLng:', L.latLng(lat, lng))
+      //console.log('latLng:', L.latLng(lat, lng))
       return L.latLng(lat, lng);
     },
+    onlyNumberImput(evt) {
+      if (Number(`${this.config.field1}${evt.key}`) > 683) {
+        evt.preventDefault();
+      }
+      const charCode = evt.which ? evt.which : evt.keyCode;
+      if (charCode > 31 &&
+        (charCode < 48 || charCode > 57 || charCode == 46)
+
+      ) {
+
+        evt.preventDefault();
+      }
+    },
     initRequest() {
-      this.axios.get("/points")
+      //console.log(this.fullPath)
+      this.axios.get(`${this.fullPath}${this.config.field1}`)
         .then(response => {
-          console.log(response.data);
+          //console.log(response.data);
           this.markers = response.data;
           this.showMap = true;
           //this.markers = this.markers.slice(2, 3)
@@ -108,6 +149,9 @@ export default {
         });
 
 
+    },
+    emitEvent() {
+      this.initRequest();
     },
     zoomUpdate(zoom) {
       this.currentZoom = zoom;
@@ -120,14 +164,35 @@ export default {
     },
     innerClick() {
       alert("Click!");
-    }
+    },
   },
   created() {
+    //this.initRequest();
+
+  },
+  mounted() {
     this.initRequest();
+
 
   },
 };
 </script>
-  
-<style></style>
-  
+<style scoped>
+h3 {
+  margin: 40px 0 0;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+a {
+  color: #42b983;
+}
+</style>
