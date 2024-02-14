@@ -136,7 +136,8 @@ export default {
     },
     initRequest() {
       //console.log(this.fullPath)
-      this.axios.get(`${this.fullPath}${this.config.field1}`)
+      var url = (this.config.field1 >= 1) ? `${this.fullPath}${this.config.field1}` : `${this.fullPath}1`
+      this.axios.get(url)
         .then(response => {
           //console.log(response.data);
           this.markers = response.data;
