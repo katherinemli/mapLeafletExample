@@ -1,13 +1,21 @@
-# Katherine Liberona Irarrázabal
+# Leaflet Map Example (Vue)
 
-[katherine.lib.ira@gmail.com](mailto:katherine.lib.ira@gmail.com) | (438) 526-1448 | Ontario, Canada | Open Work Permit
+Interactive map in Vue 2 that loads points of interest from a REST API and renders them as custom markers with tooltips and popups.
 
-Full Stack Developer with 6 years of experience building scalable web applications and microservices. Specialized in performance optimization and large-scale data processing. Successfully delivered critical applications, including e-commerce logistics systems, emergency response platforms, and network management solutions for satellite communications.
+## Highlights
+- **vue2-leaflet** map with custom marker icons, hover tooltips and click popups
+- Data fetched with Axios from a Go API
+- Child-to-parent event communication between a config tool panel and the map
+- Deployed on Netlify
 
-## Technical Skills
+## Stack
+Vue 2 · Leaflet / vue2-leaflet · Axios · Netlify
 
-Frontend: React, Vue.js, Angular, CSS, Webpack, D3.js  
-Backend: Go, PHP, C, Django, Python  
-Core: Embedded Systems, Memory Management, Threading, Network Protocols  
-Data: MySQL, MongoDB, Real-time Processing, AI/ML Integration, GIS (Google Maps, Leaflet)  
-DevOps: Docker, AWS, Nginx, Git
+## Run locally
+```bash
+npm install
+npm run serve
+```
+
+---
+Katherine Liberona Irarrázabal · [github.com/katherinemli](https://github.com/katherinemli)
